@@ -208,8 +208,12 @@ add_raster <- function(
     terra::values(raster[[layer]]),
     na.rm = TRUE
   )
+
   if (min_0) {
     rg[1L] <- 0
+  }
+  if (any(rg < 0)) {
+    rg <- c(-1, 1) * max(abs(rg))
   }
 
   pal <- leaflet::colorNumeric(

@@ -138,11 +138,11 @@ spatial_prediction_map <- function(
       layer = "mean",
       name = "Distribution",
       palette = "Spectral",
-      min_0 = TRUE
+      min_0 = F
     ) |>
     add_raster(
       spatial_prediction,
-      layer = "standarderror",
+      layer = "cv",
       name = "Uncertainty",
       palette = "viridis",
       min_0 = TRUE
