@@ -37,7 +37,8 @@ sdm_tool <- function(
     "model" = "Model",
     "predictors" = "Predictors",
     "model_metadata" = "Model Metadata",
-    "summary" = "Summary"
+    "summary" = "Summary",
+    "static" = "Extra figures and tables"
   )
   if (anyDuplicated(tabs) > 0) {
     stop("The `tabs` argument must not have duplicate values.")

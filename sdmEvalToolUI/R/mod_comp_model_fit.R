@@ -67,13 +67,19 @@ mod_comp_model_fit_server <- function(
 #'   model_fit_table()
 
 model_fit_table <- function(model_fit) {
+  names_ <- names(model_fit)
+  names_ <- names_[names_ != "metric"]
+  cols_ <- vector(length = length(names_), mode = 'list')
+  names(cols_) <- names_
+  cols_ <- purrr::map(
+    cols_,
+    ~ reactable::colDef(format = reactable::colFormat(digits = 3))
+  )
   reactable::reactable(
     model_fit,
     defaultPageSize = nrow(model_fit),
     minRows = nrow(model_fit),
-    columns = list(
-      value = reactable::colDef(format = reactable::colFormat(digits = 3))
-    ),
+    columns = cols_,
     searchable = TRUE
   )
 }

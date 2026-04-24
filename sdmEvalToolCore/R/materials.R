@@ -445,3 +445,37 @@ prep_model_fit <- function(
   }
   invisible(TRUE)
 }
+
+
+#' @rdname upload-materials
+#' @export
+prep_model_fit_wide <- function(
+  x,
+  species,
+  model_id,
+  user_id,
+  material_settings = NULL,
+  con = NULL,
+  update = FALSE,
+  ...
+) {
+  SPP <- sort(unique(x$species_id[x$species_id %in% species$species_id]))
+  for (species_id in SPP) {
+    cat("> Preparing model fit for species", species_id, "\n")
+    z <- x[x$species_id == species_id, ]
+    z$species_id <- NULL
+    z <- data.frame(metric = colnames(z), value = unlist(z))
+    upload_material(
+      "model_fit",
+      x = z,
+      model_id = model_id,
+      species_id = species_id,
+      user_id = user_id,
+      material_settings = material_settings,
+      con = con,
+      update = update,
+      ...
+    )
+  }
+  invisible(TRUE)
+}

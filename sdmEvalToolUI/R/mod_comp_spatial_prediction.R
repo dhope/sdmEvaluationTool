@@ -89,7 +89,9 @@ mod_comp_spatial_prediction_server <- function(
     spatial_prediction <- reactive({
       spatial_prediction_prep(model_id(), species_id())
     })
-
+    names_spatial_prediction <- reactive({
+      names(spatial_prediction())
+    })
     subunits <- reactive({
       deployment_subunits_prep(deployment_id())
     })
@@ -100,8 +102,14 @@ mod_comp_spatial_prediction_server <- function(
         model_id = model_id(),
         species_id = species_id()
       )
-      spatial_prediction_map(
+      # spatial_prediction_map(
+      #   spatial_prediction(),
+      #   subunits(),
+      #   ns = session$ns
+      # )
+      spatial_prediction_map_mod(
         spatial_prediction(),
+        names_spatial_prediction(),
         subunits(),
         ns = session$ns
       )
@@ -165,6 +173,49 @@ spatial_prediction_map <- function(
     add_subunits(subunits) |>
     add_control(groups = c("Distribution", "Uncertainty"))
 }
+
+#' Create a Leaflet Map of Spatial Prediction Data
+#'
+#' @param spatial_prediction terra Raster. Spatial predictions
+#' @param subunits Spatial Data frame. Deployment subunits.
+#' @param ns Namespace.
+#'
+#' @returns A leaflet map object
+#'
+#' @export
+#' @examplesIf have_data()
+#' p <- spatial_prediction_prep(model_id = "Bayesian", species_id = "Alder_Flycatcher")
+#' s <- deployment_subunits_prep("deployment1")
+#' spatial_prediction_map_mod(p, "p_obs")
+#' spatial_prediction_map_mod(p, s)
+
+spatial_prediction_map_mod <- function(
+  spatial_prediction,
+  layers = NULL,
+  subunits = NULL,
+  ns = identity
+) {
+  map <- base_map(ns = ns) |>
+    predictor_raster_layer(
+      raster = spatial_prediction,
+      layers = layers
+    ) |>
+    add_subunits(subunits)
+
+  # Add in layer controls at map creation level because `add_control()` can't
+  # use leafletProxy
+
+  # Show selections for multiple layers only
+  if (length(layers) > 1) {
+    g <- layers
+  } else {
+    g <- character(0)
+  }
+
+  map <- add_control(map, groups = g)
+  map
+}
+
 
 #' Prepare Spatial Prediction Data
 #'

@@ -74,19 +74,24 @@ model_summary_table <- function(model_summary) {
   } else {
     size <- nrow(model_summary)
   }
+  names_ <- names(model_summary)
+  if ("species_id" %in% names_) {
+    model_summary$species_id <- NULL
+  }
+  names_ <- names_[!names_ %in% c("species_id")]
+  cols_ <- vector(length = length(names_), mode = 'list')
+  names(cols_) <- names_
+  cols_ <- purrr::map(
+    cols_,
+    ~ reactable::colDef(format = reactable::colFormat(digits = 3))
+  )
+
   reactable::reactable(
     model_summary,
     searchable = TRUE,
     defaultPageSize = size,
     minRows = size,
-    columns = list(
-      mean_rel_inf = reactable::colDef(
-        format = reactable::colFormat(digits = 3)
-      ),
-      sd_rel_inf = reactable::colDef(
-        format = reactable::colFormat(digits = 3)
-      )
-    )
+    columns = cols_
   )
 }
 
