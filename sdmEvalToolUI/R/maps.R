@@ -269,7 +269,7 @@ add_raster <- function(
   pal <- leaflet::colorNumeric(
     palette,
     domain = rg,
-    reverse = TRUE,
+    reverse = FALSE,
     na.color = "transparent"
   )
 

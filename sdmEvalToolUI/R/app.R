@@ -24,7 +24,8 @@ sdm_tool <- function(
     "model",
     "predictors",
     "model_metadata",
-    "summary"
+    "summary",
+    "static"
   ),
   user = NULL,
   ...
@@ -92,8 +93,8 @@ sdm_tool <- function(
         title = "Abandon/Resume Review",
         label = NULL,
         icon = bsicons::bs_icon(
-          "x-lg",
-          size = "1em",
+          "emoji-dizzy-fill", #"x-lg",
+          size = "3em",
           title = "Abandon/Resume Review"
         ),
         class = "btn-sm btn-abandon"

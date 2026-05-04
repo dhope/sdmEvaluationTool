@@ -8,7 +8,7 @@
 #' @noRd
 simple_text_input <- function(...) {
   expand_dots(...)
-  textInput(input_id_ns, label, value = response, width = width)
+  textAreaInput(input_id_ns, label, value = response, width = width)
 }
 
 #' Yes/No input for Shiny app

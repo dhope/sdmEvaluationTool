@@ -215,7 +215,7 @@ predictor_raster_layer <- function(
       raster,
       layer = l,
       name = l,
-      palette = "viridis",
+      palette = "mako",
       opacity = 1,
       min_0 = FALSE
     )
