@@ -179,15 +179,13 @@ static_table_prep <- function(model_id, species_id) {
       table_file_v,
       ~ {
         if (file.exists(.x)) {
-          read_file(.x) %>%
-            {
-              if ("species" %in% names(.)) {
-                dplyr::filter(., .data$species == species_id) |>
-                  dplyr::select(-species)
-              } else {
-                .
-              }
-            }
+          df <- read_file(.x)
+          if ("species" %in% names(df)) {
+            df <- df |>
+              dplyr::filter(.data$species == species_id) |>
+              dplyr::select(-species)
+          }
+          df
         }
       }
     )
