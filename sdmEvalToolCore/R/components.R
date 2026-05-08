@@ -61,9 +61,8 @@ get_sdm_comp <- function() {
             }
           }
           components <- rbind(components, c1)
-
-          components
         }
+        return(components)
       },
       error = function(cnd) sdmEvalToolCore::components
     )
