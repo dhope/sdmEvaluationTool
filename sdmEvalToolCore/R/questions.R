@@ -11,7 +11,7 @@
 combine_questions <- function(q) {
   dq <- sdmEvalToolCore::default_questions
   fq <- sdmEvalToolCore::followup_questions
-  comp <- sdmEvalToolCore::components
+  comp <- get_sdm_comp() #sdmEvalToolCore::components
 
   if (any(!(q$component %in% comp$component))) {
     stop("Undefined component found in questions table.")

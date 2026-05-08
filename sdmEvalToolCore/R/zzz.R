@@ -23,7 +23,8 @@ options_set <- FALSE
         db = "sqlite",
         tz = "", # time zone for unix dates
         lang = "english",
-        verbose = 2 # 0=none, 1=sparse, 2=all
+        verbose = 2, # 0=none, 1=sparse, 2=all,
+        conf = ""
       )
     )
   }
