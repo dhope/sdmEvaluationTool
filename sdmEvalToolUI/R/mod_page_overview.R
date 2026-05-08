@@ -239,6 +239,7 @@ evals_table <- function(tbl, user_role) {
   tbl_components <- tbl
 
   tbl_top <- tbl |>
+    dplyr::filter(n_q > 0) |>
     dplyr::summarize(
       progress = sum(.data$n_q_complete) / sum(.data$n_q),
       .by = c(
