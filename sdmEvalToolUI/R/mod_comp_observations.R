@@ -176,7 +176,7 @@ mod_comp_observations_server <- function(
         model_id = model_id(),
         species_id = species_id()
       )
-      rast <- obs_prep_raster(obsf, r0)
+      rast <- obs_prep_raster(obsf, r0, scale = 1)
       obs_map_raster(
         rast,
         subunits(),
@@ -414,6 +414,7 @@ obs_prep_raster <- function(obs, rast, scale = 10, ...) {
     field = "status",
     fun = max
   )
+  out0 <- raster::mask(out0, out1, inverse = T)
   out <- c(out0, out1)
   names(out) <- c("absence", "presence")
   out

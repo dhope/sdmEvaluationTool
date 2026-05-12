@@ -346,7 +346,7 @@ add_control <- function(map, groups = character(0)) {
 
   #if ("Uncertainty" %in% groups) {
   if (length(groups) > 1) {
-    for (ii in groups[length(groups)]) {
+    for (ii in groups[-length(groups)]) {
       map <- leaflet::hideGroup(map, ii)
     }
   }
