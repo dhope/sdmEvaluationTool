@@ -272,6 +272,14 @@ add_raster <- function(
     reverse = FALSE,
     na.color = "transparent"
   )
+  if (any(rg < 0)) {
+    pal <- leaflet::colorNumeric(
+      "RdBu",
+      domain = rg,
+      reverse = FALSE,
+      na.color = "transparent"
+    )
+  }
 
   map <- map |>
     leaflet::addMapPane(paste0(name, "-pane"), zIndex = 390) |>
@@ -337,8 +345,12 @@ add_control <- function(map, groups = character(0)) {
     )
 
   #if ("Uncertainty" %in% groups) {
-  map <- leaflet::hideGroup(map, "Uncertainty")
-  map <- leaflet::hideGroup(map, "Absence")
+  if (length(groups) > 1) {
+    for (ii in groups[length(groups)]) {
+      map <- leaflet::hideGroup(map, ii)
+    }
+  }
+  # map <- leaflet::hideGroup(map, "Absence")
   #}
   map
 }

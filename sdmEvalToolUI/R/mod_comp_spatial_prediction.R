@@ -206,7 +206,7 @@ spatial_prediction_map_mod <- function(
   # use leafletProxy
 
   # Show selections for multiple layers only
-  if (length(layers) > 1) {
+  if (length(layers) > 0) {
     g <- layers
   } else {
     g <- character(0)
