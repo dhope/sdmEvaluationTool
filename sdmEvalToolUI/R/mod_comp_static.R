@@ -59,18 +59,28 @@ mod_comp_static_server <- function(
   moduleServer(id, function(input, output, session) {
     figures <- reactive(figures_prep(model_id(), species_id()))
     tables <- reactive(static_table_prep(model_id(), species_id()))
-    output$figure_legend <- renderUI(tt_material_settings(figures()))
+    figure_legends <- reactive(prep_static_figure_captions(
+      model_id(),
+      species_id()
+    ))
+    table_captions <- reactive(prep_static_table_captions(
+      model_id(),
+      species_id()
+    ))
     # output$template <- reactable::renderReactable(template_table(template()))
-
     output$figure <- renderUI({
       #reactable::renderReactable({
       req(figures())
 
       tagList(
         lapply(figures(), function(path) {
-          tags$img(
-            src = path,
-            class = "gallery-img"
+          print(path)
+          tagList(
+            tags$img(
+              src = path,
+              class = "gallery-img"
+            ),
+            tags$figcaption(figure_legends()[[path]])
           )
         })
       )
@@ -92,7 +102,7 @@ mod_comp_static_server <- function(
             ~ reactable::colDef(format = reactable::colFormat(digits = 3))
           )
           tagList(
-            h3(paste("Table Number:", idx)),
+            h3(table_captions()[[idx]]), #paste("Table Number:", idx)
             reactable::reactable(
               tab,
               defaultPageSize = nrow(tab),
@@ -204,14 +214,22 @@ static_table_prep <- function(model_id, species_id) {
   # }
 
   tables_static <- process_tables(c(spp_t, table_files))
+  table_names_ <- stringr::str_extract(
+    c(spp_t, table_files),
+    "(?<=/)([:alpha:]|(_))+(?=_table\\.parquet$)"
+  )
   if (length(tables_static) > 0) {
-    names(tables_static) <- glue::glue("table_{1:length(tables_static)}")
+    names(tables_static) <- table_names_ #_glue::glue("table_{1:length(tables_static)}")
   }
 
   # The output object returned by `prep_materials` contains an attribute
   # "material_settings" that has the legend
   attr(tables_static, "material_settings") <- list(
-    legend = list(en = "Extra static tables results", fr = "")
+    legend = list(
+      en = "Extra static tables results",
+      fr = ""
+    ),
+    table_paths = table_names_
   )
   tables_static
 }
@@ -262,3 +280,40 @@ figures_prep <- function(model_id, species_id) {
   )
   out
 }
+
+
+prep_static_figure_captions <-
+  function(model_id, species_id) {
+    p <- prep_material_settings("static", model_id, species_id)
+    # Testing
+    if (is.null(p$figure_legends)) {
+      p$figure_legends <- list(
+        "test_predictions.jpeg" = "Predictions from testing",
+        "test_predictions_pobs.jpeg" = "Predictions from testing of pobs",
+        "test_roc.jpeg" = "Receiver operoator curve for test data",
+        "train_test_predictions.jpeg" = "Training predictions versus observations",
+        "train_test_predictions_pobs.jpeg" = "Training pobs versus observations",
+        "train_test_roc.jpeg" = "Training ROC",
+        "Veery_time_date_marginal.jpeg" = "Marginal plot of date and time",
+        "Veery_time_pdp.jpeg" = "Partial plots of top variables"
+      )
+    }
+    names(p$figure_legends) <- glue::glue(
+      "{model_id}-{species_id}-plots/{names(p$figure_legends)}"
+    )
+    p$figure_legends
+  }
+
+
+prep_static_table_captions <-
+  function(model_id, species_id) {
+    p <- prep_material_settings("static", model_id, species_id)
+    # Testing
+    if (is.null(p$table_legends)) {
+      p$table_legends <- list(
+        "wai_res" = "Predictions from testing",
+        "captions" = "Predictions from testing of pobs"
+      )
+    }
+    p$table_legends
+  }
