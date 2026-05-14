@@ -339,7 +339,6 @@ add_control <- function(map, groups = character(0)) {
   # Keep only groups present
   nn <- names(groups) |> unique() # |> c("Subunits")
   groups <- unique(c(groups, "Subunits"))
-  print(groups)
   if (!is.null(nn)) {
     groups <- c(nn, "Subunits")
   }

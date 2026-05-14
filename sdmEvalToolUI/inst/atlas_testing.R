@@ -20,7 +20,8 @@ sdm_tool(
 
 devtools::load_all()
 sdmevaltool_options(
-  base = "c:/Users/HopeD/Documents/TMP_A3_SHINY_DEP/ARCHIVE/OntarioBreedingBirdAtlas/"
+  base = "c:/Users/HopeD/Documents/TMP_A3_SHINY_DEP/PACKAGED_PROJECTS/OntarioAtlasReview/OntarioBreedingBirdAtlas/",
+  conf = "../../../config.yml"
 )
 # start the app
 sdm_tool(

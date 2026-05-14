@@ -205,7 +205,6 @@ spatial_prediction_map_mod <- function(
   subunits = NULL,
   ns = identity
 ) {
-  print(layers)
   map <- base_map(ns = ns) |>
     predictor_raster_layer(
       raster = spatial_prediction,

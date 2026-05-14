@@ -74,13 +74,14 @@ mod_comp_static_server <- function(
 
       tagList(
         lapply(figures(), function(path) {
-          print(path)
           tagList(
             tags$img(
               src = path,
               class = "gallery-img"
             ),
-            tags$figcaption(figure_legends()[[path]])
+            tags$figcaption(figure_legends()[[path]]),
+            tags$hr(),
+            tags$br()
           )
         })
       )
