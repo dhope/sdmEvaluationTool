@@ -209,7 +209,8 @@ predictor_raster_layer <- function(
   # Use map data if no raster
   raster <- raster %||% leaflet::getMapData(map)
 
-  for (l in layers) {
+  for (ll in 1:length(layers)) {
+    l <- layers[ll]
     map <- add_raster(
       map,
       raster,

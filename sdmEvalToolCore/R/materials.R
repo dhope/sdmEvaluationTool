@@ -117,7 +117,7 @@ prep_deployment_questions <- function(
 ) {
   cat("> Preparing deployment questions\n")
   if (is.null(x)) {
-    q <- sdmEvalToolCore::default_questions
+    q <- get_sdm_from_env("default_questions")
   } else {
     q <- x
   }

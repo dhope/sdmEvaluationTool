@@ -254,6 +254,10 @@ add_raster <- function(
     return(map)
   }
 
+  if (!is.null(names(name))) {
+    name <- names(name)
+  }
+
   rg <- range(
     terra::values(raster[[layer]]),
     na.rm = TRUE
@@ -333,8 +337,19 @@ add_raster <- function(
 
 add_control <- function(map, groups = character(0)) {
   # Keep only groups present
+  nn <- names(groups) |> unique() # |> c("Subunits")
   groups <- unique(c(groups, "Subunits"))
-  groups <- groups[purrr::map_lgl(groups, \(g) map_has_group(map, g))]
+  print(groups)
+  if (!is.null(nn)) {
+    groups <- c(nn, "Subunits")
+  }
+  inc <- purrr::map_lgl(groups, \(g) map_has_group(map, g))
+  # if (is.null(nn)) {
+  #   groups <- groups[inc]
+  # } else {
+  #   groups <- c(nn, "Subunits")[inc]
+  # }
+  print(groups)
 
   map <- map |>
     leaflet::addLayersControl(

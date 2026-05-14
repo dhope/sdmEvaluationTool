@@ -13,7 +13,7 @@ combine_questions(q)
 Join questions and follow-ups
 }
 \examples{
-q <- sdmEvalToolCore::default_questions
+q <-  get_sdm_from_env("default_questions")
 q$followup_level[5] <- 3
 combine_questions(q)
 

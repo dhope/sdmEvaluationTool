@@ -3,15 +3,15 @@
 #' @param q A data frame with questions.
 #'
 #' @examples
-#' q <- sdmEvalToolCore::default_questions
+#' q <-  get_sdm_from_env("default_questions")
 #' q$followup_level[5] <- 3
 #' combine_questions(q)
 #'
 #' @export
 combine_questions <- function(q) {
-  dq <- sdmEvalToolCore::default_questions
-  fq <- sdmEvalToolCore::followup_questions
-  comp <- get_sdm_comp() #sdmEvalToolCore::components
+  dq <- get_sdm_from_env("default_questions")
+  fq <- get_sdm_from_env("followup_questions")
+  comp <- get_sdm_from_env("components") #sdmEvalToolCore::components
 
   if (any(!(q$component %in% comp$component))) {
     stop("Undefined component found in questions table.")

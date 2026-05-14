@@ -64,7 +64,7 @@ fake_evaluation <- function(
     time <- now()
   }
   q <- if (is.null(questions)) {
-    sdmEvalToolCore::default_questions
+    get_sdm_from_env("default_questions")
   } else {
     questions
   }

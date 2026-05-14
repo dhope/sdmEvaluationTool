@@ -83,7 +83,7 @@ db_read_table <- function(con, table_name) {
   out <- dplyr::tbl(con, table_name) |>
     dplyr::collect() |>
     db_timestamp()
-  jf <- sdmEvalToolCore::fields |>
+  jf <- get_sdm_from_env("fields") |>
     dplyr::filter(type == "jsonb", table == table_name)
   for (i in jf$field) {
     out[[i]] <- lapply(
@@ -93,7 +93,7 @@ db_read_table <- function(con, table_name) {
       }
     )
   }
-  bf <- sdmEvalToolCore::fields |>
+  bf <- get_sdm_from_env("fields") |>
     dplyr::filter(type == "boolean", table == table_name)
   for (i in bf$field) {
     out[[i]] <- as.logical(out[[i]])
@@ -292,7 +292,7 @@ make_create_table_statement <- function(
   table_name,
   force = FALSE
 ) {
-  if (!(table_name %in% sdmEvalToolCore::tables$table)) {
+  if (!(table_name %in% get_sdm_from_env("tables")$table)) {
     stop("Table ", sQuote(table_name), " not part of the spec.")
   }
   field_types <- data.frame(
@@ -325,11 +325,11 @@ make_create_table_statement <- function(
     )
   )
   dbtype <- sdmevaltool_options()$db
-  f <- sdmEvalToolCore::fields
+  f <- get_sdm_from_env("fields")
   f <- f[f$table == table_name, c("field", "type", "constraint")]
   f$type <- field_types[[dbtype]][match(f$type, field_types$field_type)]
   # add here table constraints
-  tc <- sdmEvalToolCore::tables
+  tc <- get_sdm_from_env("tables")
   tc <- tc[tc$table == table_name, "table_constraint"]
   tc <- if (!is.na(tc)) paste0(", ", tc) else ""
   v <- paste0(
@@ -402,7 +402,7 @@ db_create_tables <- function(
   }
   # DBI::dbBegin(con)
   # on.exit(DBI::dbCommit(con))
-  all_tables <- sdmEvalToolCore::tables$table
+  all_tables <- get_sdm_from_env("tables")$table
   if (is.null(tables)) {
     tables <- all_tables
   }
@@ -546,8 +546,8 @@ db_write_table <- function(
 #'
 #' @noRd
 get_table_keys <- function(table) {
-  tb <- sdmEvalToolCore::tables
-  fd <- sdmEvalToolCore::fields
+  tb <- get_sdm_from_env("tables")
+  fd <- get_sdm_from_env("fields")
   tb1 <- tb[tb$table == table, , drop = FALSE]
   fd1 <- fd[fd$table == table, , drop = FALSE]
   # FK

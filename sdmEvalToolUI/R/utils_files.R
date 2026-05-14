@@ -22,7 +22,7 @@
 
 prep_materials <- function(component_id, model_id, species_id = NULL) {
   path <- dplyr::filter(
-    sdmEvalToolCore::components,
+    sdmEvalToolCore::get_sdm_from_env("components"),
     .data$type == "material",
     .data$component == .env$component_id
   ) |>
@@ -145,7 +145,7 @@ tt_material_settings <- function(material) {
 
 prep_deployments <- function(deployment_id, deployment_type) {
   path <- dplyr::filter(
-    sdmEvalToolCore::components,
+    sdmEvalToolCore::get_sdm_from_env("components"),
     .data$type == "deployment",
     .data$component == .env$deployment_type
   ) |>
@@ -340,7 +340,7 @@ fetch_questions <- function(deployment_id, component_id) {
   q <- tryCatch(
     prep_deployments(deployment_id, "deployment_questions") |>
       dplyr::mutate(values = stringr::str_split(.data$values, ", ?")),
-    error = \(x) sdmEvalToolCore::default_questions
+    error = \(x) sdmEvalToolCore::get_sdm_from_env("default_questions")
   )
 
   if (any(component_id != "ALL")) {

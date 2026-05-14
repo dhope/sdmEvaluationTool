@@ -9,6 +9,7 @@
 \alias{prep_observations}
 \alias{prep_model_summary}
 \alias{prep_model_fit}
+\alias{prep_model_fit_wide}
 \title{Prepare Upload Materials}
 \usage{
 prep_predictor_raster(
@@ -76,6 +77,17 @@ prep_model_summary(
 )
 
 prep_model_fit(
+  x,
+  species,
+  model_id,
+  user_id,
+  material_settings = NULL,
+  con = NULL,
+  update = FALSE,
+  ...
+)
+
+prep_model_fit_wide(
   x,
   species,
   model_id,

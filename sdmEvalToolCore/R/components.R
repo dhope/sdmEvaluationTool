@@ -13,7 +13,7 @@
 #'
 #' @export
 get_comp_ready <- function(ready = character(0L)) {
-  out <- get_sdm_comp()[, c("component", "mandatory")]
+  out <- get_sdm_from_env("components")[, c("component", "mandatory")]
   out$ready <- out$component %in% ready
   attr(out, "percent_ready") <- round(
     100 * sum(out$ready & out$mandatory) / sum(out$mandatory),
@@ -26,47 +26,22 @@ get_comp_ready <- function(ready = character(0L)) {
 #'
 #'
 #' @return A data frame with default components
-get_sdm_comp <- function() {
-  suppressWarnings({
-    rlang::try_fetch(
-      {
-        cmp <- yaml::read_yaml(make_target_path(
-          sdmevaltool_options()$conf
-        ))$components
-        components <- data.frame(
-          component = character(0L),
-          description = character(0L),
-          mandatory = logical(0L),
-          type = character(0L),
-          path = character(0L),
-          upload = character(0L),
-          display = character(0L),
-          evaluation = character(0L)
-        )
-        for (i in names(cmp)) {
-          l <- cmp[[i]]
-          c1 <- data.frame(
-            component = i,
-            description = l$description,
-            mandatory = l$mandatory,
-            type = l$type,
-            path = l$upload$output$path,
-            upload = NA_character_,
-            display = NA_character_,
-            evaluation = NA_character_
-          )
-          for (j in c("upload", "display", "evaluation")) {
-            if (!is.null(l[[j]])) {
-              c1[[j]] <- list(l[[j]])
-            }
-          }
-          components <- rbind(components, c1)
-        }
-        return(components)
-      },
-      error = function(cnd) sdmEvalToolCore::components
+#'
+#' @export
+get_sdm_from_env <- function(component_name) {
+  if (
+    !component_name %in% data(package = "sdmEvalToolCore")$results[, "Item"]
+  ) {
+    rlang::abort("Component is not in list of data products for this package")
+  }
+  if (is.null(.sdmeval[[component_name]])) {
+    cmp <- get(
+      data("sdmEvalToolCore", component_name)
     )
-  })
+  } else {
+    cmp <- .sdmeval[[component_name]]
+  }
+  cmp
 }
 
 #' Get Rule for a Component
@@ -90,7 +65,7 @@ get_comp_rule <- function(
   }
   rule_type <- match.arg(rule_type)
 
-  cmp <- get_sdm_comp()
+  cmp <- get_sdm_from_env("components")
 
   rownames(cmp) <- cmp$component
   if (is.na(cmp[component_id, rule_type])) {

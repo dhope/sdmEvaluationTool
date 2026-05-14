@@ -77,20 +77,30 @@ mod_comp_spatial_prediction_server <- function(
 
   moduleServer(id, function(input, output, session) {
     # Tooltip -------------------------------------------------------
-    output$tooltip <- renderUI({
-      p <- prep_material_settings(
+    p <- reactive({
+      prep_material_settings(
         "spatial_prediction",
         model_id(),
         species_id()
       )
-      tt_material_settings(p)
+    })
+    output$tooltip <- renderUI({
+      tt_material_settings(p())
     })
     # Map --------------------------------------------------------------------
     spatial_prediction <- reactive({
       spatial_prediction_prep(model_id(), species_id())
     })
     names_spatial_prediction <- reactive({
-      names(spatial_prediction())
+      if (is.null(p()$raster_labels)) {
+        o <- names(spatial_prediction())
+        names(o) <- o
+      } else {
+        o1 <- p()$raster_labels |> unlist() %>% .[names(spatial_prediction())]
+        o <- names(o1)
+        names(o) <- o1
+      }
+      o
     })
     subunits <- reactive({
       deployment_subunits_prep(deployment_id())
@@ -195,6 +205,7 @@ spatial_prediction_map_mod <- function(
   subunits = NULL,
   ns = identity
 ) {
+  print(layers)
   map <- base_map(ns = ns) |>
     predictor_raster_layer(
       raster = spatial_prediction,
@@ -211,7 +222,6 @@ spatial_prediction_map_mod <- function(
   } else {
     g <- character(0)
   }
-
   map <- add_control(map, groups = g)
   map
 }

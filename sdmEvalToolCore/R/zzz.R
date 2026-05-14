@@ -57,5 +57,8 @@ sdmevaltool_options <- function(...) {
     }
     options("sdmevaltool_options" = npar)
   }
+  if ("conf" %in% names(args)) {
+    yaml_to_env(args$conf)
+  }
   invisible(opar)
 }

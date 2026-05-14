@@ -39,7 +39,7 @@
 #' get_fields("components")
 #' @export
 get_fields <- function(table_name) {
-  tab <- sdmEvalToolCore::fields
+  tab <- get_sdm_from_env("fields")
   table_name <- match.arg(table_name, unique(tab$table), several.ok = FALSE)
   tab[tab$table == table_name, colnames(tab) != "table"]
 }

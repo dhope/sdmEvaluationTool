@@ -11,7 +11,7 @@
 #'
 #' @export
 get_user_roles <- function(role) {
-  r <- sdmEvalToolCore::user_roles
+  r <- get_sdm_from_env("user_roles")
   role <- tolower(role)
   rownames(r) <- tolower(r$name)
   if (length(role) < 1L) {
