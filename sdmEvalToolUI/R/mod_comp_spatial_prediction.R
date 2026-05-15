@@ -96,9 +96,18 @@ mod_comp_spatial_prediction_server <- function(
         o <- names(spatial_prediction())
         names(o) <- o
       } else {
-        o1 <- p()$raster_labels |> unlist() %>% .[names(spatial_prediction())]
-        o <- names(o1)
-        names(o) <- o1
+        if ("data.frame" %in% class(p())) {
+          p_ <- p()$raster_labels |>
+            as.list() |>
+            unlist()
+        } else {
+          p_ <- p()$raster_labels
+        }
+        o <- p_[
+          p_ %in% names(spatial_prediction())
+        ]
+        # o <- names(o1)
+        # names(o) <- o1
       }
       o
     })

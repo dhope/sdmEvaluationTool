@@ -211,12 +211,20 @@ predictor_raster_layer <- function(
 
   for (ll in 1:length(layers)) {
     l <- layers[ll]
+    pal_ <- ifelse(
+      stringr::str_detect(
+        l,
+        "(?i)(CI)|(variation)|(uncertainty)|(interval)|(cv)",
+      ),
+      "OrRd",
+      "mako"
+    )
     map <- add_raster(
       map,
       raster,
       layer = l,
       name = l,
-      palette = "mako",
+      palette = pal_,
       opacity = 1,
       min_0 = FALSE
     )

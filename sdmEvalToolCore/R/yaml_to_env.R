@@ -1,8 +1,10 @@
 yaml_to_env <- function(yml_file) {
   if (is.null(yml_file)) {
     yml_file <- fs::path_package("sdmEvalToolCore", "config.yml")
+    conf <- yaml::read_yaml(yml_file)
+  } else {
+    conf <- yaml::read_yaml(make_target_path(yml_file))
   }
-  conf <- yaml::read_yaml(make_target_path(yml_file))
   if (!"list" %in% class(conf)) {
     abort("yaml file is misconfigured")
   }
@@ -150,6 +152,10 @@ yaml_to_env <- function(yml_file) {
     }
   }
   followup_questions <- e
+
+  if (!is.null(conf$obs_scale)) {
+    .sdmeval[["obs_scale"]] <- conf$obs_scale
+  }
 
   # Save data sets -----------------------------------------------------------
   vars_ <- c(

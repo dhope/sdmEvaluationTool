@@ -176,7 +176,13 @@ mod_comp_observations_server <- function(
         model_id = model_id(),
         species_id = species_id()
       )
-      rast <- obs_prep_raster(obsf, r0, scale = 1)
+      scale_ <- rlang::try_fetch(
+        sdmEvalToolCore::get_sdm_from_env("obs_scale"),
+        error = function(cdn) {
+          10
+        }
+      )
+      rast <- obs_prep_raster(obsf, r0, scale = scale_)
       obs_map_raster(
         rast,
         subunits(),

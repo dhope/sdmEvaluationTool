@@ -456,7 +456,7 @@ evals_details <- function(user_id, user_role) {
       .data$component_name
     )
 
-  evals
+  evals |> dplyr::filter(n_q > 0)
 }
 
 

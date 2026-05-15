@@ -227,7 +227,8 @@ evals_table <- function(tbl, user_role) {
   if (user_role == "modeler") {
     group_by <- c(group_by, "evaluation_create_user_name")
   }
-
+  tbl <- tbl |>
+    dplyr::filter(n_q > 0)
   # Grouped tables https://glin.github.io/reactable/articles/examples.html?q=collaps#grouping-and-aggregation
   # Nested tables https://glin.github.io/reactable/articles/examples.html?q=collaps#nested-tables
 
@@ -239,7 +240,6 @@ evals_table <- function(tbl, user_role) {
   tbl_components <- tbl
 
   tbl_top <- tbl |>
-    dplyr::filter(n_q > 0) |>
     dplyr::summarize(
       progress = sum(.data$n_q_complete) / sum(.data$n_q),
       .by = c(
