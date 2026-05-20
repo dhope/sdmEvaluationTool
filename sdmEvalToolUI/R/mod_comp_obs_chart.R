@@ -135,7 +135,7 @@ mod_comp_obs_chart_server <- function(
       p_counts <- p_counts +
         ggplot2::geom_bar() +
         ggplot2::theme_light() +
-        ggplot2::xlab("Counts") +
+        ggplot2::xlab("Number of observed birds") +
         ggplot2::ylab("Frequency") # +
       # ggplot2::scale_y_log10()
 
@@ -146,6 +146,12 @@ mod_comp_obs_chart_server <- function(
     })
 
     output$obs_chart_groups <- plotly::renderPlotly({
+      lab_y_2 <- switch(
+        input$summary,
+        "ndet" = "Number of detections",
+        "nobs" = "Number of surveys"
+      )
+
       if (input$fill == "none") {
         det <- obs() |>
           dplyr::mutate(det = ifelse(.data$status > 0, 1, 0)) |>
@@ -204,7 +210,7 @@ mod_comp_obs_chart_server <- function(
         ggplot2::geom_col() +
         ggplot2::theme_light() +
         ggplot2::xlab(tools::toTitleCase(input$groups)) +
-        ggplot2::ylab(tools::toTitleCase(input$summary))
+        ggplot2::ylab(tools::toTitleCase(lab_y_2)) #input$summary))
 
       plotly::ggplotly(p_groups) |>
         plotly::config(
