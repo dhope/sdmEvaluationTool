@@ -29,12 +29,14 @@ get_comp_ready <- function(ready = character(0L)) {
 #'
 #' @export
 get_sdm_from_env <- function(component_name) {
-  if (
-    !component_name %in% data(package = "sdmEvalToolCore")$results[, "Item"]
-  ) {
-    rlang::abort("Component is not in list of data products for this package")
-  }
   if (is.null(.sdmeval[[component_name]])) {
+    if (
+      !component_name %in% data(package = "sdmEvalToolCore")$results[, "Item"]
+    ) {
+      rlang::abort(
+        "Component in environment and is not in list of data products for this package"
+      )
+    }
     cmp <- get(
       data("sdmEvalToolCore", component_name)
     )

@@ -93,7 +93,7 @@ sdm_tool <- function(
         title = "Abandon/Resume Review",
         label = NULL,
         icon = bsicons::bs_icon(
-          "emoji-dizzy-fill", #"x-lg",
+          "exclamation-triangle-fill", #"emoji-dizzy-fill", #"x-lg",
           size = "3em",
           title = "Abandon/Resume Review"
         ),

@@ -348,7 +348,6 @@ add_control <- function(map, groups = character(0)) {
   # } else {
   #   groups <- c(nn, "Subunits")[inc]
   # }
-  print(groups)
 
   map <- map |>
     leaflet::addLayersControl(
