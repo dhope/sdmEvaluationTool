@@ -327,7 +327,7 @@ evals_details <- function(user_id, user_role) {
     dplyr::distinct()
 
   eval_expect <- dplyr::bind_rows(eval_expect, eval_app) |>
-    dplyr::mutate(evaluation_create_user = .env$eval_user)
+    tidyr::expand_grid(evaluation_create_user = .env$eval_user)
 
   eval_questions <- eval_expect |>
     dplyr::select("deployment_id", "component_id") |>
