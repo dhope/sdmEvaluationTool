@@ -1,8 +1,7 @@
 devtools::load_all()
 sdmevaltool_options(
   base = "c:/Users/HopeD/Documents/TMP_A3_SHINY_DEP/_RoF_Baseline/",
-  conf = "../config.yml"
-  #    base = "c:/Users/HopeD/Documents/sdm_evaluation_results/"
+  conf = "config.yml"
 )
 # start the app
 sdm_tool(
@@ -14,14 +13,8 @@ sdm_tool(
     "model",
     "predictors",
     # "model_metadata",
-    "summary",
-    "static"
+    "static",
+    "summary"
   ),
-  options = list(host = "0.0.0.0", port = 8080)
-)
-arrow::write_parquet(
-  mtcars,
-  make_target_path(
-    "materials/Bayesian/species/Palm_Warbler/dummy_table.parquet"
-  )
+  options = list(host = "0.0.0.0", port = 7405)
 )

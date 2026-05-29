@@ -1,5 +1,4 @@
 devtools::load_all()
-devtools::load_all("../sdmEvalToolUI/")
 
 sdmevaltool_options(
   base = "c:/Users/HopeD/Documents/sdm_evaluation_results/"
@@ -14,20 +13,17 @@ sdm_tool(
     "predictors",
     "static"
   ),
-  options = list(host = "0.0.0.0", port = 8080)
+  options = list(host = "0.0.0.0", port = 7405)
 )
 
 
 devtools::load_all()
 sdmevaltool_options(
-  base = "c:/Users/HopeD/Documents/TMP_A3_SHINY_DEP/PACKAGED_PROJECTS/OntarioAtlasReview/OntarioBreedingBirdAtlas/",
-  conf = "../../../config.yml"
+  base = "c:/Users/HopeD/Documents/TMP_A3_SHINY_DEP/ARCHIVE/OntarioBreedingBirdAtlas/",
+  conf = "../../config.yml"
 )
 # start the app
 sdm_tool(
   user = "test_user",
-  options = list(host = "0.0.0.0", port = 8080)
+  options = list(host = "0.0.0.0", port = 7428)
 )
-"c:/Users/HopeD/Desktop/spatial_prediction.tif" |> terra::rast()
-"c:/Users/HopeD/Documents/TMP_A3_SHINY_DEP/RoF_Baseline/materials/Bayesian/species/Hudsonian_Godwit/spatial_prediction.tif" |>
-  terra::rast()
