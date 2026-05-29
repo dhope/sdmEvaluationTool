@@ -9,7 +9,7 @@ add_selected_subunits(
   subunits = NULL,
   colour_by = "type",
   opacity = 0.8,
-  fill_opacity = 0.2
+  fill_opacity = 0.8
 )
 }
 \arguments{

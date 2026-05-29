@@ -6,9 +6,9 @@
 \usage{
 sdm_tool(
   lang = "english",
-  options = list(host = "0.0.0.0", port = 8080),
+  options = list(host = "0.0.0.0", port = 7428),
   tabs = c("overview", "predictions", "observations", "model", "predictors",
-    "model_metadata", "summary"),
+    "model_metadata", "summary", "static"),
   user = NULL,
   ...
 )
