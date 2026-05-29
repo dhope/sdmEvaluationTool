@@ -177,7 +177,7 @@ add_selected_subunits <- function(
   subunits = NULL,
   colour_by = "type",
   opacity = 0.8,
-  fill_opacity = 0.2
+  fill_opacity = 0.8
 ) {
   # Skip if no Subunits
   if (is.null(subunits)) {
@@ -186,7 +186,10 @@ add_selected_subunits <- function(
 
   levels <- levels(subunits[[colour_by]])
   pal <- leaflet::colorFactor(
-    viridisLite::viridis(n = length(levels)),
+    viridisLite::cividis(
+      n = length(levels),
+      direction = ifelse(grepl(x = map$id, pattern = "predict"), -1, 1)
+    ),
     levels = factor(levels, levels = levels),
     ordered = TRUE
   )
