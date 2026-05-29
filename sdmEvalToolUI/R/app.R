@@ -16,7 +16,7 @@
 
 sdm_tool <- function(
   lang = "english",
-  options = list(host = "0.0.0.0", port = 8080),
+  options = list(host = "0.0.0.0", port = 7428),
   tabs = c(
     "overview",
     "predictions",
@@ -32,7 +32,7 @@ sdm_tool <- function(
 ) {
   # Pages - Names become pretty Tab names, values are ids used for navigation (input$sdm)
   page_options <- c(
-    "overview" = "Index",
+    "overview" = "Overview",
     "predictions" = "Predictions",
     "observations" = "Observations",
     "model" = "Model",

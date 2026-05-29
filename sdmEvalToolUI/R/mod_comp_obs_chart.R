@@ -40,7 +40,7 @@ mod_comp_obs_chart_ui <- function(
           label = "Summarize",
           choices = c(
             "Observations" = "nobs",
-            "Detections" = "ndet"
+            "Only Detections" = "ndet"
           )
         ),
         selectInput(
