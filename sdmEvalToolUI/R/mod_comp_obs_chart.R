@@ -39,7 +39,7 @@ mod_comp_obs_chart_ui <- function(
           NS(id, "summary"),
           label = "Summarize",
           choices = c(
-            "Observations" = "nobs",
+            "All surveys" = "nobs",
             "Only Detections" = "ndet"
           )
         ),
@@ -55,7 +55,7 @@ mod_comp_obs_chart_ui <- function(
         ),
         selectInput(
           NS(id, "fill"),
-          label = "Color by",
+          label = "Colour by",
           choices = c(
             "None" = "none",
             # "Year" = "year",

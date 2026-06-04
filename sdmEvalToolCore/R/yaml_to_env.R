@@ -156,6 +156,9 @@ yaml_to_env <- function(yml_file) {
   if (!is.null(conf$obs_scale)) {
     .sdmeval[["obs_scale"]] <- conf$obs_scale
   }
+  if (!is.null(conf$Subunit_name)) {
+    .sdmeval[["Subunit_name"]] <- conf$Subunit_name
+  }
 
   # Save data sets -----------------------------------------------------------
   vars_ <- c(

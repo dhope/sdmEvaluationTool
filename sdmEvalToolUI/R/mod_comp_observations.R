@@ -183,6 +183,12 @@ mod_comp_observations_server <- function(
         }
       )
       rast <- obs_prep_raster(obsf, r0, scale = scale_)
+      if (nrow(obsf) > 0 & sum(obsf$status) == 0) {
+        rast[['presence']] <- NULL
+      }
+
+      v_ <- need(nrow(obsf) > 0, "Zero surveys for these settings")
+      validate(v_)
       obs_map_raster(
         rast,
         subunits(),

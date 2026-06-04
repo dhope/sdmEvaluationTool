@@ -138,7 +138,7 @@ add_subunits <- function(
   map |>
     leaflet::addPolygons(
       data = subunits,
-      group = "Subunits",
+      group = sdmEvalToolCore::get_sdm_from_env('Subunit_name'), #"Subunits",
       popup = as.character(subunits$subunit_id),
       weight = 2,
       opacity = opacity,
@@ -188,7 +188,14 @@ add_selected_subunits <- function(
   pal <- leaflet::colorFactor(
     viridisLite::cividis(
       n = length(levels),
-      direction = ifelse(grepl(x = map$id, pattern = "predict"), -1, 1)
+      direction = ifelse(
+        grepl(
+          x = replace(map$id, is.null(map$id), "null_values"),
+          pattern = "predict"
+        ),
+        -1,
+        1
+      )
     ),
     levels = factor(levels, levels = levels),
     ordered = TRUE
@@ -197,7 +204,7 @@ add_selected_subunits <- function(
   map |>
     leaflet::addPolygons(
       data = subunits,
-      group = "Subunits",
+      group = sdmEvalToolCore::get_sdm_from_env("Subunit_name"),
       popup = as.character(subunits$subunit_id),
       weight = 2,
       opacity = opacity,
@@ -341,9 +348,9 @@ add_raster <- function(
 add_control <- function(map, groups = character(0)) {
   # Keep only groups present
   nn <- names(groups) |> unique() # |> c("Subunits")
-  groups <- unique(c(groups, "Subunits"))
+  groups <- unique(c(groups, sdmEvalToolCore::get_sdm_from_env('Subunit_name')))
   if (!is.null(nn)) {
-    groups <- c(nn, "Subunits")
+    groups <- c(nn, sdmEvalToolCore::get_sdm_from_env('Subunit_name'))
   }
   inc <- purrr::map_lgl(groups, \(g) map_has_group(map, g))
   # if (is.null(nn)) {

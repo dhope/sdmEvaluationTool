@@ -37,9 +37,7 @@ get_sdm_from_env <- function(component_name) {
         "Component in environment and is not in list of data products for this package"
       )
     }
-    cmp <- get(
-      data("sdmEvalToolCore", component_name)
-    )
+    cmp <- getExportedValue("sdmEvalToolCore", component_name)
   } else {
     cmp <- .sdmeval[[component_name]]
   }

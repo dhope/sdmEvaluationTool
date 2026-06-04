@@ -37,7 +37,7 @@ mod_utils_map_selections_ui <- function(id, spatial_type) {
       ),
       div(
         strong(glue::glue(
-          "Copy selected {stringr::str_remove(spatial_type, 's$')} IDs"
+          "Copy selected {stringr::str_remove(sdmEvalToolCore::get_sdm_from_env('Subunit_name'), 's$')} IDs"
         )),
         copy_output(NS(id, "selected"))
       )
@@ -215,9 +215,13 @@ mod_utils_map_selections_server <- function(
         nrow(curr_selected()) == 0 ||
           "Selected" %in% curr_selected()$type
       ) {
-        title <- glue::glue("Currently selected {spatial_type}")
+        title <- glue::glue(
+          "Currently selected {sdmEvalToolCore::get_sdm_from_env('Subunit_name')}"
+        )
       } else {
-        title <- glue::glue("Identified {spatial_type}")
+        title <- glue::glue(
+          "Identified {sdmEvalToolCore::get_sdm_from_env('Subunit_name')}"
+        )
       }
       title
     })
