@@ -75,7 +75,8 @@ mod_page_overview_server <- function(id = "overview", ...) {
 
     observe({
       if (
-        opts$user_role() == "evaluator" &
+        !is.null(opts$user_id()) &&
+          opts$user_role() == "evaluator" &&
           sdmEvalToolCore::get_sdm_from_env("show_popup")
       ) {
         shinyalert::shinyalert(
