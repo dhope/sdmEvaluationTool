@@ -33,6 +33,9 @@ Create a folder for the app, e.g. `app`.
 
 Move the deployment materials into the `app/sdm_evaluation_results` folder.
 
+If using a folder name other than `sdm_evaluation_results`, make sure to
+set the base path option: `sdmevaltool_options(base = "some_other_path")`.
+
 ### Step 3: Add the app code and users
 
 Make sure that the sdmEvalToolCore and sdmEvalToolUI packages are installed via 
@@ -59,12 +62,7 @@ Create a file inside the `app` folder named `app/app.R` and copy the contents of
 library(sdmEvalToolCore)
 library(sdmEvalToolUI)
 
-con <- withr::local_db_connection(sdmEvalToolUI::db_connect_check())
-users <- sdmEvalToolCore::db_read_table(con, "users")
-users$user <- users$user_id
-users$password <- "pass1234"
-
-sdm_tool(user_db = users)
+sdm_tool(user_db = make_user_db())
 ```
 
 The authentication functionality of the SDM Model Evaluation Tool relies on the 
