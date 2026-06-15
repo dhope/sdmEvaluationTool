@@ -143,7 +143,8 @@ mod_comp_observations_server <- function(
     # print(unlist(input$map_bounds))
     # })
 
-    output$map <- leaflet::renderLeaflet({
+    # output$map <- leaflet::renderLeaflet({
+    obs_raster <- reactive({
       yr_sel <- if (is.null(input$year)) {
         unique(obs()$year)
       } else {
@@ -186,15 +187,28 @@ mod_comp_observations_server <- function(
       if (nrow(obsf) > 0 & sum(obsf$status) == 0) {
         rast[['presence']] <- NULL
       }
-
+      rast
+    })
+    output$map <- leaflet::renderLeaflet({
       v_ <- need(nrow(obsf) > 0, "Zero surveys for these settings")
       validate(v_)
       obs_map_raster(
-        rast,
+        obs_raster(),
         subunits(),
         ns = session$ns
-      )
-    })
+      ) |>
+        set_view(map_views, "observations")
+    }) |>
+      bindEvent(obs_raster())
+
+    # Synchronize map views ------------------------------------------------
+    mod_utils_map_sync_server(
+      "sync",
+      parent_id,
+      this_view = map_view(input, "map"),
+      map_views,
+      parent_session = session
+    )
 
     # Process and show map selections ---------------------------------------
     interactions <- map_reactive_vals(input, "map")
