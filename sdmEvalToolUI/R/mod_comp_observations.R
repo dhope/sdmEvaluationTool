@@ -30,7 +30,7 @@ mod_comp_observations_ui <- function(
   layout_columns(
     gap = 0, # No gap between top and bottom
     col_widths = 12, # One column
-    row_heights = c("60%", "40%"), # More map than selection area(
+    row_heights = c("60%", "40%"), # More map than selection area
     sdm_card(
       class = "sub-card",
       sdm_card_header(header, uiOutput(NS(id, "tooltip"))),
@@ -55,11 +55,14 @@ mod_comp_observations_ui <- function(
 #' Observations component Server
 #'
 #' @param id Module ID
+#' @param parent_id Parent tab ID (used to identify which tab is active)
 #' @param deployment_id Deployment ID. Required for subunits.
 #' @param model_id Model ID
 #' @param species_id Species ID
 #' @param spatial_selection Spatial selection
 #' @param spatial_ids Spatial IDs
+#' @param map_views List. List of reactiveVals `active_tab`, `set_by` and
+#'   `view` (list with zoom and lat/lon).
 #'
 #' @returns Module server function
 #'
@@ -67,15 +70,18 @@ mod_comp_observations_ui <- function(
 
 mod_comp_observations_server <- function(
   id = "comp_observations",
+  parent_id,
   deployment_id,
   model_id,
   species_id,
   spatial_selection,
-  spatial_ids # ReactiveVal to be update
+  spatial_ids, # ReactiveVal to be update
+  map_views
 ) {
   stopifnot(is.reactive(deployment_id))
   stopifnot(is.reactive(model_id))
   stopifnot(is.reactive(species_id))
+  purrr::walk(map_views, \(v) stopifnot(is.reactive(v)))
 
   moduleServer(id, function(input, output, session) {
     # Setup -------------------------------------------------------------
@@ -134,16 +140,6 @@ mod_comp_observations_server <- function(
       )
     })
 
-    # observe({
-    # setView(map, lng, lat, zoom)
-    # print(
-    #   c(unlist(input$map_center), zoom = input$map_zoom)
-    # )
-    # fitBounds(map, lng1, lat1, lng2, lat2)
-    # print(unlist(input$map_bounds))
-    # })
-
-    # output$map <- leaflet::renderLeaflet({
     obs_raster <- reactive({
       yr_sel <- if (is.null(input$year)) {
         unique(obs()$year)
@@ -192,6 +188,7 @@ mod_comp_observations_server <- function(
     output$map <- leaflet::renderLeaflet({
       v_ <- need(nrow(obsf) > 0, "Zero surveys for these settings")
       validate(v_)
+
       obs_map_raster(
         obs_raster(),
         subunits(),
