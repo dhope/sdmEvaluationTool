@@ -186,7 +186,11 @@ mod_comp_observations_server <- function(
       rast
     })
     output$map <- leaflet::renderLeaflet({
-      v_ <- need(nrow(obsf) > 0, "Zero surveys for these settings")
+      # browser()
+      v_ <- need(
+        !all(is.na(terra::global(obs_raster(), "sum", na.rm = TRUE))),
+        "Zero surveys for these settings"
+      )
       validate(v_)
 
       obs_map_raster(
