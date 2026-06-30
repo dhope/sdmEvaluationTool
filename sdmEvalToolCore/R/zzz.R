@@ -52,8 +52,7 @@ sdmevaltool_options <- function(...) {
     if (length(args) == 1 && is.list(args[[1]])) {
       npar <- args[[1]]
     } else {
-      npar <- opar
-      npar[match(names(args), names(npar))] <- args
+      npar <- utils::modifyList(opar, args)
     }
     options("sdmevaltool_options" = npar)
   }

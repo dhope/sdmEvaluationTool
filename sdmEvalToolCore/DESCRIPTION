@@ -36,7 +36,8 @@ Imports:
     RSQLite,
     terra,
     rlang,
-    withr
+    withr,
+    utils
 Suggests: 
     rmarkdown
 LazyData: true
