@@ -7,8 +7,9 @@
 sdm_tool(
   lang = "english",
   options = list(host = "0.0.0.0", port = 7405),
+
   tabs = c("overview", "predictions", "observations", "model", "predictors",
-    "model_metadata", "summary", "static"),
+   "summary", "static"),
   user = NULL,
   user_db = NULL,
   ...
