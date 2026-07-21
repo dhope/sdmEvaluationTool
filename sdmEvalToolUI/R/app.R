@@ -24,7 +24,8 @@ sdm_tool <- function(
     "observations",
     "model",
     "predictors",
-    "summary"
+    "summary",
+    "static"
   ),
   user = NULL,
   user_db = NULL,
@@ -37,7 +38,7 @@ sdm_tool <- function(
     "observations" = "Observations",
     "model" = "Model",
     "predictors" = "Predictors",
-    "model_metadata" = "Model Metadata",
+    # "model_metadata" = "Model Metadata",
     "summary" = "Summary",
     "static" = "Extra figures and tables"
   )

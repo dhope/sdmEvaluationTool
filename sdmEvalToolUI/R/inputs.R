@@ -9,7 +9,7 @@
 simple_text_input <- function(...) {
   expand_dots(...)
   label <- span(label, metadata_popover)
-  textInput(input_id_ns, label, value = response, width = width)
+  textAreaInput(input_id_ns, label, value = response, width = width)
 }
 
 #' Yes/No input for Shiny app
@@ -177,7 +177,11 @@ ui_questions <- function(
           parent_spatial,
           parent_values
         ) {
-          metadata_popover <- ui_metadata(metadata)
+          if (!is.na(metadata)) {
+            metadata_popover <- ui_metadata(metadata)
+          } else {
+            metadata_popover <- NULL
+          }
 
           i <- get(glue::glue("{type}_input"))(
             input_id_ns = ns(question_id),

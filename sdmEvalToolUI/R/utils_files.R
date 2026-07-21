@@ -289,15 +289,18 @@ prep_questions <- function(
 
   # Add any metadata - Only add those with actual data!
   meta <- prep_materials("model_metadata", model_id = model_id) |>
-    dplyr::select("metadata_id", "element", "value") |>
+    dplyr::select(tidyr::any_of(c("metadata_id", "element", "value"))) |>
     tidyr::drop_na()
-
-  q <- q |>
-    dplyr::mutate(
-      metadata = purrr::map(.data$metadata_id, \(m) {
-        dplyr::filter(meta, .data$metadata_id %in% .env$m)
-      })
-    )
+  if ("metadata_id" %in% names(meta)) {
+    q <- q |>
+      dplyr::mutate(
+        metadata = purrr::map(.data$metadata_id, \(m) {
+          dplyr::filter(meta, .data$metadata_id %in% .env$m)
+        })
+      )
+  } else {
+    q$metadata <- NA
+  }
 
   if (!is.null(user_id)) {
     # Get any existing evaluations
@@ -361,7 +364,7 @@ fetch_questions <- function(deployment_id, component_id) {
     q <- dplyr::filter(q, .data$component %in% .env$component_id)
   }
   # TODO: Temporary until all questions updated
-  if (!"metadata_id" %in% names(q)) {
+  if (!"metadata_id" %in% names(q) && nrow(q) > 0) {
     q$metadata_id <- NA_character_
   }
 
