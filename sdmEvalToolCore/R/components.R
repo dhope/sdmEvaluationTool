@@ -33,11 +33,15 @@ get_sdm_from_env <- function(component_name) {
     if (
       !component_name %in% data(package = "sdmEvalToolCore")$results[, "Item"]
     ) {
-      rlang::abort(
-        "Component in environment and is not in list of data products for this package"
+      rlang::warn(
+        glue::glue(
+          "Component {component_name} in environment and is not in list of data products for this package"
+        )
       )
+      cmp <- NULL
+    } else {
+      cmp <- getExportedValue("sdmEvalToolCore", component_name)
     }
-    cmp <- getExportedValue("sdmEvalToolCore", component_name)
   } else {
     cmp <- .sdmeval[[component_name]]
   }

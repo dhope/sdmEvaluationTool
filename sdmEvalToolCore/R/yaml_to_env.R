@@ -161,6 +161,9 @@ yaml_to_env <- function(yml_file) {
   if (!is.null(conf$Subunit_name)) {
     .sdmeval[["Subunit_name"]] <- conf$Subunit_name
   }
+  if (!is.null(conf$affirmative_values)) {
+    .sdmeval[["affirmative_values"]] <- conf$affirmative_values
+  }
 
   # Save data sets -----------------------------------------------------------
   vars_ <- c(

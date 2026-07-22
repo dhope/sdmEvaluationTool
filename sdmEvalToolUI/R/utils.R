@@ -156,16 +156,18 @@ identical_loose <- function(i1, i2) {
 
 affirmative <- function(type = "standard") {
   # CLEANUP: Put this somewhere better?
-
-  if (type == "standard") {
-    a <- c("Extremely", "Very", "Moderately", "Slightly", "Yes")
-  } else if (type == "spatial") {
-    a <- c(
-      "Very_biased",
-      "Moderately_biased",
-      "Very_undersampled",
-      "Moderately_undersampled"
-    )
+  a <- sdmEvalToolCore::get_sdm_from_env("affirmative_values")[[type]]
+  if (is.null(a)) {
+    if (type == "standard") {
+      a <- c("Extremely", "Very", "Moderately", "Slightly", "Yes")
+    } else if (type == "spatial") {
+      a <- c(
+        "Very_biased",
+        "Moderately_biased",
+        "Very_undersampled",
+        "Moderately_undersampled"
+      )
+    }
   }
   a
 }
