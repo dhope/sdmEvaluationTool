@@ -42,11 +42,10 @@ yes_no_input <- function(...) {
 #' @noRd
 ordinal_input <- function(...) {
   expand_dots(...)
-  label <- span(label, metadata_popover)
-  selectInput(
-    inputId = input_id_ns,
-    label = label,
-    choices = c(
+  if (exists("values")) {
+    v <- values
+  } else {
+    v <- c(
       # NOTE: If modifying these options, must also update `affirmative()`
       # function to define what constitutes a 'positive'/'affirmative' response.
       "Choose one" = "",
@@ -56,7 +55,13 @@ ordinal_input <- function(...) {
       "Slightly",
       "Not at all",
       "Uncertain"
-    ),
+    )
+  }
+  label <- span(label, metadata_popover)
+  selectInput(
+    inputId = input_id_ns,
+    label = label,
+    choices = values,
     selected = response
   )
 }
@@ -205,7 +210,7 @@ ui_questions <- function(
               condition <- glue::glue(
                 "['",
                 glue::glue_collapse(affirmative(), sep = "', '"),
-                "'].includes(input.{parent_id})"
+                "'].includes(input.{value_to_input(parent_id)})"
               )
             }
 

@@ -20,14 +20,14 @@ base_map <- function(ns = identity) {
   layers_id <- ns("layers_visible")
 
   leaflet::leaflet() |>
-    leaflet::addTiles(
-      urlTemplate = "http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga",
-      group = "Google",
-      options = leaflet::providerTileOptions(zIndex = 200)
-    ) |>
+    # leaflet::addTiles(
+    #   urlTemplate = "http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga",
+    #   group = "Google",
+    #   options = leaflet::providerTileOptions(zIndex = 200)
+    # ) |>
     leaflet::addProviderTiles(
-      provider = "CartoDB.Positron",
-      group = "CartoDB",
+      provider = "OpenTopoMap", #"CartoDB.Positron",
+      group = "OpenTopo",
       options = leaflet::providerTileOptions(zIndex = 200)
     ) |>
     leaflet::addProviderTiles(
@@ -361,7 +361,7 @@ add_control <- function(map, groups = character(0)) {
 
   map <- map |>
     leaflet::addLayersControl(
-      baseGroups = c("CartoDB", "ESRI", "Open Street Map", "Google"),
+      baseGroups = c("OpenTopo", "ESRI", "Open Street Map"), #c("CartoDB", "ESRI", "Open Street Map", "Google")
       overlayGroups = groups,
       position = "topright",
       options = leaflet::layersControlOptions(collapsed = FALSE)

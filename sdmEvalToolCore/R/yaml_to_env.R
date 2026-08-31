@@ -164,6 +164,9 @@ yaml_to_env <- function(yml_file) {
   if (!is.null(conf$affirmative_values)) {
     .sdmeval[["affirmative_values"]] <- conf$affirmative_values
   }
+  if (!is.null(conf$use_metadata)) {
+    .sdmeval[["use_metadata"]] <- conf$use_metadata
+  }
 
   # Save data sets -----------------------------------------------------------
   vars_ <- c(

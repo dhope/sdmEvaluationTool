@@ -288,16 +288,23 @@ prep_questions <- function(
     )
 
   # Add any metadata - Only add those with actual data!
-  meta <- prep_materials("model_metadata", model_id = model_id) |>
-    dplyr::select(tidyr::any_of(c("metadata_id", "element", "value"))) |>
-    tidyr::drop_na()
-  if ("metadata_id" %in% names(meta)) {
-    q <- q |>
-      dplyr::mutate(
-        metadata = purrr::map(.data$metadata_id, \(m) {
-          dplyr::filter(meta, .data$metadata_id %in% .env$m)
-        })
-      )
+  if (
+    is.null(sdmEvalToolCore::get_sdm_from_env("use_metadata")) ||
+      sdmEvalToolCore::get_sdm_from_env("use_metadata") != "False"
+  ) {
+    meta <- prep_materials("model_metadata", model_id = model_id) |>
+      dplyr::select(tidyr::any_of(c("metadata_id", "element", "value"))) |>
+      tidyr::drop_na()
+    if ("metadata_id" %in% names(meta)) {
+      q <- q |>
+        dplyr::mutate(
+          metadata = purrr::map(.data$metadata_id, \(m) {
+            dplyr::filter(meta, .data$metadata_id %in% .env$m)
+          })
+        )
+    } else {
+      q$metadata <- NA
+    }
   } else {
     q$metadata <- NA
   }
