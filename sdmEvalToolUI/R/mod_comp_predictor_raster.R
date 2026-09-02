@@ -217,7 +217,8 @@ predictor_raster_map <- function(
 predictor_raster_layer <- function(
   map,
   raster = NULL,
-  layers = NULL
+  layers = NULL,
+  model_predictions = FALSE
 ) {
   if (is.null(layers)) {
     return(map)
@@ -230,7 +231,7 @@ predictor_raster_layer <- function(
     l <- layers[ll]
     pred_layers <- stringr::str_detect(
       l,
-      "(?i)(CI)|(variation)|(uncertainty)|(interval)|(cv)|(ci)|(mu)|(q50)",
+      "(?i)(CI)|(variation)|(uncertainty)|(interval)|(cv)|(ci)",
     )
     pal_ <- ifelse(
       pred_layers,
@@ -245,7 +246,7 @@ predictor_raster_layer <- function(
       palette = pal_,
       opacity = 1,
       min_0 = FALSE,
-      predictions_ = any(pred_layers)
+      predictions_ = model_predictions
     )
   }
 

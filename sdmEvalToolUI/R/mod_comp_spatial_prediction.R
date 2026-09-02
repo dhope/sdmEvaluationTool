@@ -228,7 +228,8 @@ spatial_prediction_map_mod <- function(
   map <- base_map(ns = ns) |>
     predictor_raster_layer(
       raster = spatial_prediction,
-      layers = layers
+      layers = layers,
+      model_predictions = TRUE
     ) |>
     add_subunits(subunits)
 
