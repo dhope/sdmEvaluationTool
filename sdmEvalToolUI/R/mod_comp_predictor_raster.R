@@ -228,11 +228,12 @@ predictor_raster_layer <- function(
 
   for (ll in 1:length(layers)) {
     l <- layers[ll]
+    pred_layers <- stringr::str_detect(
+      l,
+      "(?i)(CI)|(variation)|(uncertainty)|(interval)|(cv)|(ci)|(mu)|(q50)",
+    )
     pal_ <- ifelse(
-      stringr::str_detect(
-        l,
-        "(?i)(CI)|(variation)|(uncertainty)|(interval)|(cv)",
-      ),
+      pred_layers,
       "OrRd",
       "mako"
     )
@@ -243,7 +244,8 @@ predictor_raster_layer <- function(
       name = l,
       palette = pal_,
       opacity = 1,
-      min_0 = FALSE
+      min_0 = FALSE,
+      predictions_ = any(pred_layers)
     )
   }
 

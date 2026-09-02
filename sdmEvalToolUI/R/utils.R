@@ -171,3 +171,24 @@ affirmative <- function(type = "standard") {
   }
   a
 }
+
+inv_sqrt <- function(x) {
+  x^2
+}
+inv_log10 <- function(x) {
+  10^x
+}
+
+
+get_inv <- function(trans) {
+  stopifnot(is.function(get(trans)))
+  if (trans == 'sqrt') {
+    return("inv_sqrt")
+  } else if (trans == 'log10') {
+    return("inv_log10")
+  } else if (trans == 'log') {
+    return("exp")
+  } else {
+    stop("tranformation not supported")
+  }
+}

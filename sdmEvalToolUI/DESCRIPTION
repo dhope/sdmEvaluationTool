@@ -30,6 +30,7 @@ Imports:
     glue (>= 1.8.0),
     htmlwidgets (>= 1.6.4),
     jsonlite (>= 2.0.0),
+    leaflegend,
     leaflet,
     leaflet.extras (>= 2.0.2),
     plotly (>= 4.11.0),

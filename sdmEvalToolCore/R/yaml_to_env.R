@@ -167,6 +167,11 @@ yaml_to_env <- function(yml_file) {
   if (!is.null(conf$use_metadata)) {
     .sdmeval[["use_metadata"]] <- conf$use_metadata
   }
+  if (!is.null(conf$scale_raster_predictions)) {
+    .sdmeval[["scale_raster_predictions"]] <- conf$scale_raster_predictions
+  } else {
+    .sdmeval[["scale_raster_predictions"]] <- 'linear'
+  }
 
   # Save data sets -----------------------------------------------------------
   vars_ <- c(

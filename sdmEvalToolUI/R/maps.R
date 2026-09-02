@@ -257,7 +257,8 @@ add_raster <- function(
   palette,
   opacity = 0.8,
   add_legend = TRUE,
-  min_0 = TRUE
+  min_0 = TRUE,
+  predictions_ = FALSE
 ) {
   # Skip if no layer
   if (!layer %in% names(raster)) {
@@ -276,8 +277,25 @@ add_raster <- function(
   if (min_0) {
     rg[1L] <- 0
   }
+
   if (any(rg < 0)) {
     rg <- c(-1, 1) * max(abs(rg))
+  }
+  if (isTRUE(predictions_) && !any(rg < 0)) {
+    transformation_ <- sdmEvalToolCore::get_sdm_from_env(
+      'scale_raster_predictions'
+    )
+  } else {
+    transformation_ <- 'linear'
+  }
+  lyr <- raster[[layer]]
+  if (transformation_ != 'linear' && is.function(get(transformation_))) {
+    rg <- match.fun(transformation_)(rg)
+    lyr <- match.fun(transformation_)(lyr)
+  }
+  if (any(abs(rg) == Inf)) {
+    ii <- which(abs(rg) == Inf)
+    rg[ii] <- sign(rg[ii]) * 1e10
   }
 
   pal <- leaflet::colorNumeric(
@@ -286,6 +304,7 @@ add_raster <- function(
     reverse = FALSE,
     na.color = "transparent"
   )
+
   if (any(rg < 0)) {
     pal <- leaflet::colorNumeric(
       "RdBu",
@@ -298,22 +317,48 @@ add_raster <- function(
   map <- map |>
     leaflet::addMapPane(paste0(name, "-pane"), zIndex = 390) |>
     leaflet::addRasterImage(
-      raster[[layer]],
+      lyr,
       colors = pal,
       group = name,
       opacity = opacity,
       options = leaflet::pathOptions(pane = paste0(name, "-pane"))
     )
   if (add_legend) {
-    map <- map |>
-      leaflet::addLegend(
-        pal = pal,
-        values = rg,
-        position = "bottomleft",
-        title = name,
-        layerId = name,
-        group = name
-      )
+    if (transformation_ != 'linear' && is.function(get(transformation_))) {
+      map <- map |>
+        leaflegend::addLegendNumeric(
+          pal = pal,
+          values = rg,
+          position = 'bottomleft',
+          orientation = 'vertical',
+          title = name,
+          layerId = name,
+          group = name,
+          # height = 129,
+          # width = 18,
+          # bins = 5,
+          # fillOpacity = .5,
+          numberFormat = function(x) {
+            prettyNum(
+              get(get_inv(transformation_))(x),
+              format = "g",
+              big.mark = ",",
+              digits = 2,
+              scientific = FALSE
+            )
+          }
+        )
+    } else {
+      map <- map |>
+        leaflet::addLegend(
+          pal = pal,
+          values = rg,
+          position = "bottomleft",
+          title = name,
+          layerId = name,
+          group = name
+        )
+    }
   }
 
   map
