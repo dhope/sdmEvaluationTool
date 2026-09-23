@@ -269,10 +269,10 @@ add_raster <- function(
     name <- names(name)
   }
 
-  rg <- range(
-    terra::values(raster[[layer]]),
-    na.rm = TRUE
-  )
+  rg <- #range(
+    terra::minmax(raster[[layer]]) #values(,
+  # na.rm = TRUE
+  # )
 
   if (min_0) {
     rg[1L] <- 0
@@ -296,6 +296,11 @@ add_raster <- function(
   if (any(abs(rg) == Inf)) {
     ii <- which(abs(rg) == Inf)
     rg[ii] <- sign(rg[ii]) * 1e10
+  }
+
+  if (terra::minmax(lyr)[1] < rg[1L] || terra::minmax(lyr)[2] > rg[2L]) {
+    rg[1L] <- min(terra::minmax(lyr)[1], rg[1L])
+    rg[2L] <- max(terra::minmax(lyr)[2], rg[2L])
   }
 
   pal <- leaflet::colorNumeric(
