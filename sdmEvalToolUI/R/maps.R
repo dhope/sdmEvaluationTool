@@ -297,10 +297,21 @@ add_raster <- function(
     ii <- which(abs(rg) == Inf)
     rg[ii] <- sign(rg[ii]) * 1e10
   }
-
-  if (terra::minmax(lyr)[1] < rg[1L] || terra::minmax(lyr)[2] > rg[2L]) {
-    rg[1L] <- min(terra::minmax(lyr)[1], rg[1L])
-    rg[2L] <- max(terra::minmax(lyr)[2], rg[2L])
+  min_lyr <- terra::minmax(lyr)[1]
+  max_lyr <- terra::minmax(lyr)[2]
+  if (min_lyr < rg[1L] || max_lyr > rg[2L]) {
+    if (min_lyr > 0) {
+      mult_ <- 0.999
+    } else {
+      mult_ <- 1.001
+    }
+    if (max_lyr < 0) {
+      mult_2 <- 0.999
+    } else {
+      mult_2 <- 1.001
+    }
+    rg[1L] <- min(min_lyr, rg[1L]) * mult_
+    rg[2L] <- max(max_lyr, rg[2L]) * mult_2
   }
 
   pal <- leaflet::colorNumeric(
