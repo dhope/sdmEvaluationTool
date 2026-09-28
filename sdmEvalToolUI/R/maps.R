@@ -290,29 +290,31 @@ add_raster <- function(
   }
   lyr <- raster[[layer]]
   if (transformation_ != 'linear' && is.function(get(transformation_))) {
-    rg <- match.fun(transformation_)(rg)
     lyr <- match.fun(transformation_)(lyr)
+    rg <- terra::minmax(lyr, compute = T)
+
+    #match.fun(transformation_)(rg)
   }
   if (any(abs(rg) == Inf)) {
     ii <- which(abs(rg) == Inf)
     rg[ii] <- sign(rg[ii]) * 1e10
   }
-  min_lyr <- terra::minmax(lyr)[1]
-  max_lyr <- terra::minmax(lyr)[2]
-  if (min_lyr < rg[1L] || max_lyr > rg[2L]) {
-    if (min_lyr > 0) {
-      mult_ <- 0.999
-    } else {
-      mult_ <- 1.001
-    }
-    if (max_lyr < 0) {
-      mult_2 <- 0.999
-    } else {
-      mult_2 <- 1.001
-    }
-    rg[1L] <- min(min_lyr, rg[1L]) * mult_
-    rg[2L] <- max(max_lyr, rg[2L]) * mult_2
+  min_lyr <- terra::minmax(lyr, compute = T)[1]
+  max_lyr <- terra::minmax(lyr, compute = T)[2]
+  # if (min_lyr < rg[1L] || max_lyr > rg[2L]) {
+  if (min_lyr > 0) {
+    mult_ <- 0.999
+  } else {
+    mult_ <- 1.001
   }
+  if (max_lyr < 0) {
+    mult_2 <- 0.999
+  } else {
+    mult_2 <- 1.001
+  }
+  rg[1L] <- min(min_lyr, rg[1L]) * mult_
+  rg[2L] <- max(max_lyr, rg[2L]) * mult_2
+  # }
 
   pal <- leaflet::colorNumeric(
     palette,
@@ -329,7 +331,7 @@ add_raster <- function(
       na.color = "transparent"
     )
   }
-
+  # browser()
   map <- map |>
     leaflet::addMapPane(paste0(name, "-pane"), zIndex = 390) |>
     leaflet::addRasterImage(
@@ -359,7 +361,7 @@ add_raster <- function(
               get(get_inv(transformation_))(x),
               format = "g",
               big.mark = ",",
-              digits = 2,
+              digits = 4,
               scientific = FALSE
             )
           }
