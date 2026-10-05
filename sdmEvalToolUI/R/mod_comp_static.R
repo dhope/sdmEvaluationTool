@@ -232,7 +232,8 @@ static_table_prep <- function(model_id, species_id) {
     ),
     table_paths = table_names_
   )
-  tables_static
+  # tables_static
+  NULL
 }
 
 #' Prepare Template Data
@@ -258,7 +259,7 @@ figures_prep <- function(model_id, species_id) {
       "materials/{model_id}/species/{species_id}",
       list(model_id = model_id, species_id = species_id)
     ),
-    ".jpeg",
+    "jpeg|png",
     full.names = F
   )
 

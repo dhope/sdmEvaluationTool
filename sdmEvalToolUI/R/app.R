@@ -1,3 +1,27 @@
+shiny_alert_function <- function() {
+  shinyalert::shinyalert(
+    "Welcome to the SDM Evaluation Tool",
+    html = T,
+    closeOnEsc = T,
+    closeOnClickOutside = T,
+    # "Welcome to the ___ Dashboard!",
+    text = tags$img(
+      src = "popup/popup.png",
+      # class = 'gallery-img',
+      width = 1915 / 1.8,
+      height = 936 / 1.8
+    ),
+    size = 'l'
+    # ,
+    # callbackR = function(value) {
+    #   # If user checked the box, set the flag to FALSE
+    #   if (!is.null(input$dont_show) && input$dont_show) {
+    #     show_alert_flag(FALSE)
+    #   }
+    # }
+  )
+}
+
 #' Launch the SDM Evaluation Tool Shiny Application
 #'
 #' @param lang Character. Language of app; either `english` or `french`.
@@ -99,6 +123,17 @@ sdm_tool <- function(
           title = "Abandon/Resume Review"
         ),
         class = "btn-sm btn-abandon"
+      )),
+      nav_item(actionButton(
+        "instructions",
+        title = "Show popup instructions",
+        label = NULL,
+        icon = bsicons::bs_icon(
+          "menu-up", #"emoji-dizzy-fill", #"x-lg",
+          # size = "3em",
+          title = "Show popup instructions"
+        ),
+        class = "btn-mini btn-rnd btn-instructions"
       ))
     ),
     nav_item(actionButton(
@@ -249,6 +284,8 @@ sdm_tool <- function(
 
     # Track Map View  ---------------------------------
     observe(map_views$active_tab(input$sdm))
+
+    observeEvent(input$instructions, shiny_alert_function())
 
     # Abandon Review -----------------------------------
     # CLEANUP: Similar to mod_utils_evaluations_server... could be merged?
@@ -724,12 +761,25 @@ sdm_theme <- function() {
         .btn-glossary {
           position: fixed;
           bottom: 20px;
-          right: 40px;
+          left: 40px;
           z-index: 1000;
           font-size: 2em;
           color: grey;
         }
         .btn-glossary:hover {
+          color: black;
+          background-color: transparent;
+        }
+           /* Glossary Button */
+        .btn-instructions {
+          position: fixed;
+          top: 20px;
+          left: 40px;
+          z-index: 1000;
+          font-size: 2em;
+          color: grey;
+        }
+        .btn-instructions:hover {
           color: black;
           background-color: transparent;
         }

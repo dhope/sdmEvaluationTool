@@ -79,42 +79,7 @@ mod_page_overview_server <- function(id = "overview", ...) {
           opts$user_role() == "evaluator" &&
           sdmEvalToolCore::get_sdm_from_env("show_popup")
       ) {
-        shinyalert::shinyalert(
-          "Welcome to the SDM Evaluation Tool",
-          html = T,
-          closeOnEsc = T,
-          closeOnClickOutside = T,
-          # "Welcome to the ___ Dashboard!",
-          text = tags$img(
-            src = "popup/popup.png",
-            # class = 'gallery-img',
-            width = 1915 / 1.8,
-            height = 936 / 1.8
-          ),
-          size = 'l',
-          #   shiny::tagList(
-          #   tags$p(
-          #     "If you're looking for help getting started, the figure below may be of some help."
-          #   ),
-          #   # tags$br(),
-          #   # checkboxInput(
-          #   #   "dont_show",
-          #   #   "Click here if you do not want to see this box again",
-          #   #   value = FALSE,
-          #   #   width = "100%"
-          #   # )
-
-          # ),
-          # imageUrl = sdmEvalToolCore::make_target_path("popup.jpeg"),
-          # imageWidth = 100,
-          # imageHeight = 100,
-          callbackR = function(value) {
-            # If user checked the box, set the flag to FALSE
-            if (!is.null(input$dont_show) && input$dont_show) {
-              show_alert_flag(FALSE)
-            }
-          }
-        )
+        shiny_alert_function()
       }
     })
 
