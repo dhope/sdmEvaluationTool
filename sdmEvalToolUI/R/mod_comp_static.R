@@ -69,6 +69,11 @@ mod_comp_static_server <- function(
     ))
     # output$template <- reactable::renderReactable(template_table(template()))
     output$figure <- renderUI({
+      validate_ids(
+        # deployment_id = deployment_id(),
+        model_id = model_id(),
+        species_id = species_id()
+      )
       #reactable::renderReactable({
       req(figures())
 

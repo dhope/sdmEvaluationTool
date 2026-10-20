@@ -57,7 +57,18 @@ ordinal_input <- function(...) {
       "Uncertain"
     )
   }
-  label <- span(label, metadata_popover)
+  if (
+    stringr::str_detect(
+      label,
+      "Do you wish to complete a full review of spatial outputs for this species"
+    )
+  ) {
+    ll <- stringr::str_split_1(label, "\\?")
+    label <- tagList(h2(ll[[1]]), strong(ll[[2]]), span(metadata_popover))
+    # label <- h2(label, metadata_popover)
+  } else {
+    label <- span(label, metadata_popover)
+  }
   selectInput(
     inputId = input_id_ns,
     label = label,
