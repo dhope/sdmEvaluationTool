@@ -283,9 +283,13 @@ prep_questions <- function(
         .data$order,
         .data$part,
         sep = "_"
-      ),
-      metadata_id = stringr::str_split(.data$metadata_id, ",( )?")
+      )
     )
+  if (!"metadata_id" %in% names(q)) {
+    q$metadata_id <- NA_character_
+  } else {
+    q$metadata_id <- stringr::str_split(q$metadata_id, ",( )?")
+  }
 
   # Add any metadata - Only add those with actual data!
   if (
