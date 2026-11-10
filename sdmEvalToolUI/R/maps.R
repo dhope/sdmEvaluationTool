@@ -340,7 +340,7 @@ add_raster <- function(
       group = name,
       opacity = opacity,
       maxBytes = 48 * 1024 * 1024,
-      project = F,
+      project = T,
       options = leaflet::pathOptions(pane = paste0(name, "-pane"))
     )
   if (add_legend) {
